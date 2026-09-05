@@ -66,12 +66,10 @@ Annotated image is returned
 Result displayed to the user
 ```
 ## Getting Started
-###1. Clone the repository
-
+### 1. Clone the repository
 ```git clone https://github.com/ashika-v-k/potholedetector.git```
 
 Move into the project directory:
-
 ```cd potholedetector```
 
 ### 2. Create a virtual environment
