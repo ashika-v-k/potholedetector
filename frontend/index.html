@@ -5,66 +5,314 @@
 
     <meta charset="UTF-8">
 
+    <!-- IMPORTANT FOR MOBILE -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Pothole Detector</title>
+    <meta
+        name="description"
+        content="RoadGuard AI - AI powered pothole detection system"
+    >
+
+    <title>RoadGuard AI | Pothole Detection</title>
 
     <link rel="stylesheet" href="/static/style.css">
 
 </head>
 
+
 <body>
 
-    <div class="container">
-
-        <h1>Pothole Detector</h1>
-
-        <p class="subtitle">
-            Upload a road image to detect potholes
-        </p>
+    <div class="road-lines"></div>
 
 
-        <!-- Image upload -->
-
-        <input
-            type="file"
-            id="imageInput"
-            accept=".jpg,.jpeg,.png"
-        >
+    <main class="app">
 
 
-        <!-- Image preview -->
+        <!-- ==============================
+             HEADER
+        =============================== -->
 
-        <div class="preview-container">
+        <header class="header">
 
-            <img
-                id="preview"
-                alt="Image preview"
-            >
+            <div class="brand">
 
-        </div>
+                <div class="brand-icon">
+                    ⬡
+                </div>
+
+                <div class="brand-text">
+
+                    <h1>
+                        RoadGuard <span>AI</span>
+                    </h1>
+
+                    <p>
+                        Intelligent Road Surface Analysis
+                    </p>
+
+                </div>
+
+            </div>
 
 
-        <!-- Detect button -->
+            <div class="status">
+
+                <span class="status-dot"></span>
+
+                <span>AI SYSTEM ONLINE</span>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- ==============================
+             HERO
+        =============================== -->
+
+        <section class="hero">
+
+            <p class="eyebrow">
+                COMPUTER VISION • ROAD SAFETY
+            </p>
+
+
+            <h2>
+                Detect potholes.<br>
+                <span>Make roads safer.</span>
+            </h2>
+
+
+            <p class="description">
+
+                Upload a road image and let our AI-powered
+                detection system identify and locate potholes
+                automatically.
+
+            </p>
+
+        </section>
+
+
+
+        <!-- ==============================
+             IMAGE INPUT + PREVIEW
+        =============================== -->
+
+        <section class="detection-card">
+
+
+            <!-- INPUT -->
+
+            <div class="upload-section">
+
+                <div class="section-label">
+
+                    <span>01</span>
+                    INPUT IMAGE
+
+                </div>
+
+
+                <div class="upload-box">
+
+                    <div class="upload-icon">
+                        ↑
+                    </div>
+
+
+                    <h3>
+                        Upload a road image
+                    </h3>
+
+
+                    <p>
+                        JPG, JPEG or PNG
+                    </p>
+
+
+                    <label
+                        for="imageInput"
+                        class="choose-button"
+                    >
+                        Choose Image
+                    </label>
+
+
+                    <input
+                        type="file"
+                        id="imageInput"
+                        accept="image/jpeg,image/jpg,image/png"
+                    >
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PREVIEW -->
+
+            <div class="preview-section">
+
+                <div class="section-label">
+
+                    <span>02</span>
+                    IMAGE PREVIEW
+
+                </div>
+
+
+                <div class="preview-box">
+
+                    <div
+                        class="preview-placeholder"
+                        id="previewPlaceholder"
+                    >
+
+                        <div class="placeholder-icon">
+                            ◉
+                        </div>
+
+                        <p>
+                            Your image will appear here
+                        </p>
+
+                    </div>
+
+
+                    <img
+                        id="preview"
+                        alt="Uploaded road image preview"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==============================
+             DETECTION BUTTON
+        =============================== -->
 
         <button
             id="detectButton"
+            class="detect-button"
             onclick="uploadImage()"
         >
-            Detect Potholes
+
+            <span>
+                RUN POTHOLE DETECTION
+            </span>
+
+            <span class="arrow">
+                →
+            </span>
+
         </button>
 
 
-        <!-- Loading message -->
 
-        <p id="loading"></p>
+        <!-- ==============================
+             LOADING
+        =============================== -->
+
+        <div
+            id="loading"
+            class="loading"
+        ></div>
 
 
-        <!-- Result -->
 
-        <h2 id="result"></h2>
+        <!-- ==============================
+             RESULT
+        =============================== -->
 
-    </div>
+        <section
+            id="resultCard"
+            class="result-card hidden"
+        >
+
+            <div class="result-title">
+
+                <div>
+
+                    <p class="section-label">
+
+                        <span>03</span>
+                        DETECTION RESULT
+
+                    </p>
+
+
+                    <h3>
+                        Analysis Complete
+                    </h3>
+
+                </div>
+
+
+                <div class="result-icon">
+                    ✓
+                </div>
+
+            </div>
+
+
+            <div class="result-content">
+
+                <div class="count-box">
+
+                    <span
+                        class="count-number"
+                        id="count"
+                    >
+                        0
+                    </span>
+
+
+                    <span class="count-label">
+                        POTHOLES DETECTED
+                    </span>
+
+                </div>
+
+
+                <div class="result-message">
+
+                    <p id="result"></p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==============================
+             FOOTER
+        =============================== -->
+
+        <footer>
+
+            <span>
+                ROADGUARD AI
+            </span>
+
+
+            <span>
+                YOLO • COMPUTER VISION • FASTAPI
+            </span>
+
+        </footer>
+
+
+    </main>
 
 
     <script src="/static/script.js"></script>

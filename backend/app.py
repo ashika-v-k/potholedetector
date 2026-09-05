@@ -1,16 +1,20 @@
 from fastapi import FastAPI, UploadFile, File
-from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, JSONResponse
 from ultralytics import YOLO
+
 import shutil
 import os
+import uuid
+import cv2
+
 
 app = FastAPI()
 
 
-# -----------------------------
-# Serve frontend files
-# -----------------------------
+# ==========================================
+# FRONTEND
+# ==========================================
 
 app.mount(
     "/static",
@@ -19,59 +23,97 @@ app.mount(
 )
 
 
-# -----------------------------
-# Load YOLO model
-# -----------------------------
-
-model = YOLO("backend/models/best.pt")
-
-
-# -----------------------------
-# Upload folder
-# -----------------------------
-
-UPLOAD_FOLDER = "uploads"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-
-# -----------------------------
-# Home page
-# -----------------------------
-
 @app.get("/")
 def home():
     return FileResponse("frontend/index.html")
 
 
-# -----------------------------
-# Pothole detection
-# -----------------------------
+# ==========================================
+# UPLOADS / DETECTED IMAGES
+# ==========================================
+
+UPLOAD_FOLDER = "uploads"
+
+os.makedirs(
+    UPLOAD_FOLDER,
+    exist_ok=True
+)
+
+app.mount(
+    "/uploads",
+    StaticFiles(directory=UPLOAD_FOLDER),
+    name="uploads"
+)
+
+
+# ==========================================
+# YOLO MODEL
+# ==========================================
+
+model = YOLO("backend/models/best.pt")
+
+
+# ==========================================
+# DETECTION
+# ==========================================
 
 @app.post("/detect")
-async def detect(file: UploadFile = File(...)):
+async def detect(
+    file: UploadFile = File(...)
+):
 
-    print("Received file:", file.filename)
-    print("File type:", file.content_type)
+    # Create a unique filename
+    extension = os.path.splitext(file.filename)[1]
 
-    # Save uploaded image
+    filename = f"{uuid.uuid4()}{extension}"
+
     filepath = os.path.join(
         UPLOAD_FOLDER,
-        file.filename
+        filename
     )
 
-    with open(filepath, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
 
-    print("Image saved:", filepath)
+    # Save uploaded image
+    with open(filepath, "wb") as buffer:
+
+        shutil.copyfileobj(
+            file.file,
+            buffer
+        )
+
 
     # Run YOLO
     results = model(filepath)
 
-    # Count detected potholes
-    count = len(results[0].boxes)
 
-    print("Potholes detected:", count)
+    # Count potholes
+    count = len(
+        results[0].boxes
+    )
 
-    return {
-        "potholes": count
-    }
+
+    # Create annotated image
+    annotated_image = results[0].plot()
+
+
+    # Save annotated image
+    annotated_filename = (
+        f"annotated_{uuid.uuid4()}.jpg"
+    )
+
+    annotated_path = os.path.join(
+        UPLOAD_FOLDER,
+        annotated_filename
+    )
+
+    cv2.imwrite(
+        annotated_path,
+        annotated_image
+    )
+
+
+    # Send result back to frontend
+    return JSONResponse({
+        "potholes": count,
+        "image_url": f"/uploads/{annotated_filename}"
+    })

@@ -1,65 +1,114 @@
-const imageInput = document.getElementById("imageInput");
-const preview = document.getElementById("preview");
-const result = document.getElementById("result");
-const loading = document.getElementById("loading");
-const detectButton = document.getElementById("detectButton");
+// =========================================
+// GET ELEMENTS
+// =========================================
+
+const imageInput =
+    document.getElementById("imageInput");
+
+const preview =
+    document.getElementById("preview");
+
+const previewPlaceholder =
+    document.getElementById("previewPlaceholder");
+
+const resultCard =
+    document.getElementById("resultCard");
+
+const result =
+    document.getElementById("result");
+
+const loading =
+    document.getElementById("loading");
+
+const detectButton =
+    document.getElementById("detectButton");
+
+const count =
+    document.getElementById("count");
 
 
-// -----------------------------------
-// Show selected image
-// -----------------------------------
+// =========================================
+// IMAGE SELECTED
+// =========================================
 
-imageInput.addEventListener("change", function () {
+imageInput.addEventListener(
+    "change",
+    function () {
 
-    if (this.files.length === 0) {
-        return;
+        if (this.files.length === 0) {
+            return;
+        }
+
+
+        const file = this.files[0];
+
+
+        // Check file type
+
+        if (!file.type.startsWith("image/")) {
+
+            alert(
+                "Please select a valid image file."
+            );
+
+            return;
+        }
+
+
+        // Create preview URL
+
+        const imageURL =
+            URL.createObjectURL(file);
+
+
+        // Show image
+
+        preview.src = imageURL;
+
+        preview.style.display = "block";
+
+
+        // Hide placeholder
+
+        previewPlaceholder.style.display =
+            "none";
+
+
+        // Hide old result
+
+        resultCard.classList.add("hidden");
+
+
+        // Reset result
+
+        count.innerText = "0";
+
+        result.innerText = "";
+
+        loading.innerText = "";
+
     }
-
-    const file = this.files[0];
-
-    console.log("Selected file:", file.name);
-    console.log("File type:", file.type);
-    console.log("File size:", file.size);
+);
 
 
-    // Check whether it is an image
-
-    if (!file.type.startsWith("image/")) {
-
-        alert("Please select a valid image file.");
-
-        return;
-    }
-
-
-    // Show preview
-
-    preview.src = URL.createObjectURL(file);
-
-    preview.style.display = "block";
-
-
-    // Clear old result
-
-    result.innerText = "";
-
-});
-
-
-// -----------------------------------
-// Upload image and detect potholes
-// -----------------------------------
+// =========================================
+// DETECTION
+// =========================================
 
 async function uploadImage() {
 
-    const file = imageInput.files[0];
+
+    const file =
+        imageInput.files[0];
 
 
-    // Check if image was selected
+    // Check if image exists
 
     if (!file) {
 
-        alert("Please select an image first.");
+        alert(
+            "Please select an image first."
+        );
 
         return;
     }
@@ -69,86 +118,175 @@ async function uploadImage() {
 
     if (!file.type.startsWith("image/")) {
 
-        alert("Please select a valid image.");
+        alert(
+            "Please select a valid image."
+        );
 
         return;
     }
 
 
+    // Hide previous result
+
+    resultCard.classList.add(
+        "hidden"
+    );
+
+
     // Show loading
 
-    loading.innerText = "Detecting potholes...";
+    loading.innerText =
+        "Detecting potholes...";
 
-    result.innerText = "";
 
     detectButton.disabled = true;
 
 
     // Create FormData
 
-    const formData = new FormData();
+    const formData =
+        new FormData();
 
-    formData.append("file", file);
+
+    formData.append(
+        "file",
+        file
+    );
 
 
     try {
 
-        console.log("Sending image to FastAPI...");
+        // Send image to FastAPI
+
+        const response =
+            await fetch(
+                "/detect",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
 
 
-        // Send image to backend
-
-        const response = await fetch("/detect", {
-
-            method: "POST",
-
-            body: formData
-
-        });
-
-
-        console.log("Response status:", response.status);
-
-
-        // Check server response
+        // Check response
 
         if (!response.ok) {
 
             throw new Error(
-                "Server returned status " + response.status
+                "Server returned status " +
+                response.status
             );
 
         }
 
 
-        // Convert response to JSON
+        // Read JSON
 
-        const data = await response.json();
-
-
-        console.log("Backend response:", data);
+        const data =
+            await response.json();
 
 
-        // Display result
+        console.log(
+            "Backend response:",
+            data
+        );
 
-        result.innerText =
-            "Potholes Detected: " + data.potholes;
+
+        // =====================================
+        // SHOW DETECTED IMAGE
+        // =====================================
+
+        if (data.image_url) {
+
+            preview.src =
+                data.image_url +
+                "?t=" +
+                Date.now();
+
+            preview.style.display =
+                "block";
+
+            previewPlaceholder.style.display =
+                "none";
+        }
 
 
-    } catch (error) {
+        // =====================================
+        // SHOW COUNT
+        // =====================================
 
-        console.error("Detection error:", error);
+        count.innerText =
+            data.potholes;
 
-        result.innerText =
+
+        // =====================================
+        // RESULT MESSAGE
+        // =====================================
+
+        if (data.potholes === 0) {
+
+            result.innerText =
+                "No potholes were detected in this image.";
+
+        }
+
+        else if (data.potholes === 1) {
+
+            result.innerText =
+                "1 pothole was detected in this image.";
+
+        }
+
+        else {
+
+            result.innerText =
+                data.potholes +
+                " potholes were detected in this image.";
+
+        }
+
+
+        // =====================================
+        // SHOW RESULT CARD
+        // =====================================
+
+        resultCard.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Detection error:",
+            error
+        );
+
+
+        resultCard.classList.add(
+            "hidden"
+        );
+
+
+        loading.innerText =
             "Unable to fetch detection result.";
 
     }
 
 
-    // Remove loading
+    finally {
 
-    loading.innerText = "";
+        // Remove loading message
 
-    detectButton.disabled = false;
+        loading.innerText = "";
+
+
+        // Enable button again
+
+        detectButton.disabled = false;
+
+    }
 
 }

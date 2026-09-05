@@ -9,3 +9,4 @@ ultralytics
 torch
 torchvision
 python-multipart
+opencv-python
