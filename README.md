@@ -48,6 +48,7 @@ RoadGuard AI is designed to demonstrate how computer vision can be used to ident
 
 The application follows this workflow:
 
+```
 User uploads road image
         ↓
 Frontend sends image to FastAPI
@@ -63,7 +64,7 @@ Number of potholes is calculated
 Annotated image is returned
         ↓
 Result displayed to the user
-
+```
 ## Getting Started
 ###1. Clone the repository
 git clone https://github.com/ashika-v-k/potholedetector.git
@@ -91,9 +92,10 @@ Open the URL in your browser.
 #  Dataset
 
 The model was trained using a pothole image dataset in YOLO format.
-The dataset contains road images with pothole annotations and was divided into training, validation, and test sets.
-The dataset was obtained from Roboflow Universe:
 
+The dataset contains road images with pothole annotations and was divided into training, validation, and test sets.
+
+The dataset was obtained from Roboflow Universe:  
 Pothole Dataset — Brad Dwyer
 
 Dataset:
