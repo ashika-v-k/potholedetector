@@ -1,65 +1,154 @@
 const imageInput = document.getElementById("imageInput");
 const preview = document.getElementById("preview");
+const result = document.getElementById("result");
+const loading = document.getElementById("loading");
+const detectButton = document.getElementById("detectButton");
 
-imageInput.addEventListener("change", () => {
 
-    if(imageInput.files.length>0){
+// -----------------------------------
+// Show selected image
+// -----------------------------------
 
-        preview.src = URL.createObjectURL(imageInput.files[0]);
+imageInput.addEventListener("change", function () {
 
-        preview.style.display="block";
-
+    if (this.files.length === 0) {
+        return;
     }
+
+    const file = this.files[0];
+
+    console.log("Selected file:", file.name);
+    console.log("File type:", file.type);
+    console.log("File size:", file.size);
+
+
+    // Check whether it is an image
+
+    if (!file.type.startsWith("image/")) {
+
+        alert("Please select a valid image file.");
+
+        return;
+    }
+
+
+    // Show preview
+
+    preview.src = URL.createObjectURL(file);
+
+    preview.style.display = "block";
+
+
+    // Clear old result
+
+    result.innerText = "";
 
 });
 
-document.getElementById("detectBtn").addEventListener("click", uploadImage);
 
-async function uploadImage(){
+// -----------------------------------
+// Upload image and detect potholes
+// -----------------------------------
 
-    if(imageInput.files.length==0){
+async function uploadImage() {
 
-        alert("Please select an image.");
+    const file = imageInput.files[0];
+
+
+    // Check if image was selected
+
+    if (!file) {
+
+        alert("Please select an image first.");
 
         return;
-
     }
 
-    document.getElementById("loading").innerHTML="Detecting...";
 
-    document.getElementById("result").innerHTML="";
+    // Check image type
 
-    const formData=new FormData();
+    if (!file.type.startsWith("image/")) {
 
-    formData.append("file",imageInput.files[0]);
+        alert("Please select a valid image.");
 
-    try{
+        return;
+    }
 
-        const response=await fetch("http://127.0.0.1:8000/detect",{
 
-            method:"POST",
+    // Show loading
 
-            body:formData
+    loading.innerText = "Detecting potholes...";
+
+    result.innerText = "";
+
+    detectButton.disabled = true;
+
+
+    // Create FormData
+
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+
+    try {
+
+        console.log("Sending image to FastAPI...");
+
+
+        // Send image to backend
+
+        const response = await fetch("/detect", {
+
+            method: "POST",
+
+            body: formData
 
         });
 
-        const data=await response.json();
 
-        document.getElementById("loading").innerHTML="";
+        console.log("Response status:", response.status);
 
-        document.getElementById("result").innerHTML=
-        "Potholes Detected : "+data.potholes;
+
+        // Check server response
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Server returned status " + response.status
+            );
+
+        }
+
+
+        // Convert response to JSON
+
+        const data = await response.json();
+
+
+        console.log("Backend response:", data);
+
+
+        // Display result
+
+        result.innerText =
+            "Potholes Detected: " + data.potholes;
+
+
+    } catch (error) {
+
+        console.error("Detection error:", error);
+
+        result.innerText =
+            "Unable to fetch detection result.";
 
     }
 
-    catch(error){
 
-        document.getElementById("loading").innerHTML="";
+    // Remove loading
 
-        alert(error);
+    loading.innerText = "";
 
-        console.log(error);
-
-    }
+    detectButton.disabled = false;
 
 }

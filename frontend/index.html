@@ -1,38 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pothole Detection System</title>
 
-    <link rel="stylesheet" href="style.css">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pothole Detector</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-<h1>Pothole Detection System</h1>
+        <h1>Pothole Detector</h1>
 
-<input type="file" id="imageInput" accept="image/*">
+        <p class="subtitle">
+            Upload a road image to detect potholes
+        </p>
 
-<br><br>
 
-<img id="preview">
+        <!-- Image upload -->
 
-<br><br>
+        <input
+            type="file"
+            id="imageInput"
+            accept=".jpg,.jpeg,.png"
+        >
 
-<button id="detectBtn">
-    Detect Potholes
-</button>
 
-<h2 id="loading"></h2>
+        <!-- Image preview -->
 
-<h2 id="result"></h2>
+        <div class="preview-container">
 
-</div>
+            <img
+                id="preview"
+                alt="Image preview"
+            >
 
-<script src="script.js"></script>
+        </div>
+
+
+        <!-- Detect button -->
+
+        <button
+            id="detectButton"
+            onclick="uploadImage()"
+        >
+            Detect Potholes
+        </button>
+
+
+        <!-- Loading message -->
+
+        <p id="loading"></p>
+
+
+        <!-- Result -->
+
+        <h2 id="result"></h2>
+
+    </div>
+
+
+    <script src="/static/script.js"></script>
 
 </body>
+
 </html>

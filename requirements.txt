@@ -3,4 +3,9 @@ uvicorn
 ultralytics
 torch
 torchvision
+fastapi
+uvicorn
+ultralytics
+torch
+torchvision
 python-multipart
