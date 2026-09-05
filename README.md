@@ -68,26 +68,26 @@ Result displayed to the user
 ## Getting Started
 ###1. Clone the repository
 
-git clone https://github.com/ashika-v-k/potholedetector.git
+```git clone https://github.com/ashika-v-k/potholedetector.git```
 
 Move into the project directory:
 
-cd potholedetector
+```cd potholedetector```
 
 ### 2. Create a virtual environment
-python -m venv .venv
+```python -m venv .venv```
 
 Activate it on Windows:
-.\.venv\Scripts\Activate
+```.\.venv\Scripts\Activate```
 
 ### 3. Install dependencies
-python -m pip install -r requirements.txt
+```python -m pip install -r requirements.txt```
 
 ### 4. Start the FastAPI server
-python -m uvicorn backend.app:app --reload
+```python -m uvicorn backend.app:app --reload```
 
 The application will be available at:
-http://127.0.0.1:8000
+```http://127.0.0.1:8000```
 
 Open the URL in your browser.
 
