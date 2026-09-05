@@ -67,9 +67,11 @@ Result displayed to the user
 ```
 ## Getting Started
 ###1. Clone the repository
+
 git clone https://github.com/ashika-v-k/potholedetector.git
 
 Move into the project directory:
+
 cd potholedetector
 
 ### 2. Create a virtual environment
@@ -97,7 +99,6 @@ The dataset contains road images with pothole annotations and was divided into t
 
 The dataset was obtained from Roboflow Universe:  
 Pothole Dataset — Brad Dwyer
-
 Dataset:
 https://universe.roboflow.com/brad-dwyer/pothole-voxrl
 
