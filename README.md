@@ -95,9 +95,51 @@ The model was trained using a pothole image dataset in YOLO format.
 
 The dataset contains road images with pothole annotations and was divided into training, validation, and test sets.
 
+
 The dataset was obtained from Roboflow Universe:  
 Pothole Dataset — Brad Dwyer
 Dataset:
 https://universe.roboflow.com/brad-dwyer/pothole-voxrl
 
 The dataset is provided under the ODbL 1.0 license.
+
+# Future Improvements
+
+## Possible future improvements include:
+
+- GPS-based pothole location mapping
+- Interactive pothole maps
+- Pothole statistics and analytics
+- Road condition monitoring
+- Mobile application
+- Cloud deployment
+- Severity classification for potholes
+- City-wide pothole reporting
+- Historical pothole tracking
+
+# Limitations
+
+The accuracy of pothole detection depends on factors such as:
+
+Image quality
+Lighting conditions
+Camera angle
+Pothole size
+Road surface conditions
+
+The system is intended as a demonstration of computer vision-based pothole detection and should not be considered a replacement for professional road inspection.
+
+# Author
+
+Ashika V K
+
+B.Tech Electronics & Communication Engineering
+Model Engineering College
+
+# License
+
+This project is intended for educational and demonstration purposes.
+
+<img width="1535" height="693" alt="Screenshot 2026-09-06 111353" src="https://github.com/user-attachments/assets/febf4b62-adb2-4c07-a15e-1dddc3ddc738" />
+<img width="1535" height="687" alt="Screenshot 2026-09-06 111419" src="https://github.com/user-attachments/assets/f3d12500-b7ed-4e23-9bd6-5e1d57865668" />
+<img width="1535" height="690" alt="Screenshot 2026-09-06 111441" src="https://github.com/user-attachments/assets/cb6d7f3e-db45-459b-ada9-4a6980fee62f" />
